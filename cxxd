@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-from __future__ import print_function
+#!/usr/bin/env python3
 import argparse
 import re
 import subprocess
@@ -14,13 +13,11 @@ def colorize(s, vt100_index):
     return "\033[38;5;%dm%s\033[0m" % (vt100_index, s)
 
 
-class XXDParser(object):
-    __metaclass__ = ABCMeta
-
+class XXDParser(object, metaclass=ABCMeta):
     null_color = 59
     address_separator = ": "
     hex_separator = "  "
-    pixel_char = u'\u25FC'
+    pixel_char = '\u25FC'
     regex_bin = "([01]{8})"
     regex_hex = "([A-Fa-f0-9]{2})"
 
@@ -128,7 +125,8 @@ args, rem_args = ap.parse_known_args()
 parser = GradientPalette(False, args.rotate)
 colorizer = lambda line: parser.parse(line, args.pixelate)
 xxd = subprocess.Popen(["xxd"] + rem_args, stdin=sys.stdin, stdout=subprocess.PIPE)
-map(lambda line: print(format_line(line, colorizer).encode('utf-8')), xxd.stdout)
+for line in xxd.stdout:
+    print(format_line(line, colorizer).encode('utf-8'))
 
 # When `xxd` returns an error code, propagate it up.
 exitcode = xxd.wait()
