@@ -149,40 +149,45 @@ def format_line(line, colorizer):
     )
 
 
-signal(SIGPIPE, SIG_DFL)
+def main():
+    signal(SIGPIPE, SIG_DFL)
 
-ap = argparse.ArgumentParser(
-    description="colorized xxd",
-    epilog="NOTE: Above are cxxd-specific optargs. All xxd optargs should also be supported.",
-    formatter_class=lambda prog: argparse.HelpFormatter(
-        prog, max_help_position=25, width=80
-    ),
-)
-ap.add_argument(
-    "-R",
-    "--rotate",
-    type=int,
-    default=0,
-    help="circularly rotate color gradient base index",
-)
-ap.add_argument(
-    "-x",
-    "--pixelate",
-    action="store_true",
-    default=False,
-    help="replace hex values with colored blocks",
-)
-args, rem_args = ap.parse_known_args()
+    ap = argparse.ArgumentParser(
+        description="colorized xxd",
+        epilog="NOTE: Above are cxxd-specific optargs. All xxd optargs should also be supported.",
+        formatter_class=lambda prog: argparse.HelpFormatter(
+            prog, max_help_position=25, width=80
+        ),
+    )
+    ap.add_argument(
+        "-R",
+        "--rotate",
+        type=int,
+        default=0,
+        help="circularly rotate color gradient base index",
+    )
+    ap.add_argument(
+        "-x",
+        "--pixelate",
+        action="store_true",
+        default=False,
+        help="replace hex values with colored blocks",
+    )
+    args, rem_args = ap.parse_known_args()
 
-parser = GradientPalette(False, args.rotate)
-colorizer = lambda line: parser.parse(line, args.pixelate)
-xxd = subprocess.Popen(
-    ["xxd"] + rem_args, stdin=sys.stdin, stdout=subprocess.PIPE, close_fds=False
-)
-for line in xxd.stdout:
-    print(format_line(line.decode(), colorizer))
+    parser = GradientPalette(False, args.rotate)
+    colorizer = lambda line: parser.parse(line, args.pixelate)
+    xxd = subprocess.Popen(
+        ["xxd"] + rem_args, stdin=sys.stdin, stdout=subprocess.PIPE, close_fds=False
+    )
+    for line in xxd.stdout:
+        print(format_line(line.decode(), colorizer))
 
-# When `xxd` returns an error code, propagate it up.
-exitcode = xxd.wait()
-if exitcode:
-    exit(exitcode)
+    # When `xxd` returns an error code, propagate it up.
+    exitcode = xxd.wait()
+    if exitcode:
+        exit(exitcode)
+
+
+if __name__ == "__main__":
+    main()
