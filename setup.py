@@ -5,7 +5,7 @@ setup(
     version="1.0.0",
     description="A colorized drop-in replacement for xxd.",
     author="Sai Kalidindi",
-    url="https://github.com/skalidindi3/cxxd",
+    url="https://github.com/anowlcalledjosh/cxxd",
     license="MIT",
     classifiers=[
         "Environment :: Console",
