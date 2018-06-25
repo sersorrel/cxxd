@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="cxxd",
-    version="1.0.0",
+    version="1.0.1",
     description="A colorized drop-in replacement for xxd.",
     author="Sai Kalidindi",
     url="https://github.com/anowlcalledjosh/cxxd",
