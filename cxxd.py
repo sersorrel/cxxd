@@ -119,9 +119,9 @@ class AsciiPalette(XXDParser):
                 return  # chars
             if byte.isdigit():
                 return  # num
-            if byte is " ":
+            if byte == " ":
                 return  # space
-            if byte is "	":
+            if byte == "	":
                 return  # tab
             return  # punctuation
         if byte == 0x0A:
